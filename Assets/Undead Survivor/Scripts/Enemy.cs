@@ -6,16 +6,21 @@ public class Enemy : MonoBehaviour
 {
 
     public float eSpeed;
+    public float eHealth;
+    public float eMaxHealth;
+    public RuntimeAnimatorController[] eAnimCon;
     public Rigidbody2D eTarget;
 
-    bool isLive = true;
+    bool isLive;
     Rigidbody2D eRigid;
     SpriteRenderer eSprite;
+    Animator eAnim;
 
     void Awake()
     {
         eRigid = GetComponent<Rigidbody2D>();
         eSprite = GetComponent<SpriteRenderer>();
+        eAnim = GetComponent<Animator>();
     }
 
     void FixedUpdate()
@@ -40,5 +45,36 @@ public class Enemy : MonoBehaviour
     void OnEnable()
     {
         eTarget = GameManager.instace.player.GetComponent<Rigidbody2D>();
+        isLive = true;
+        eHealth = eMaxHealth;
+    }
+
+    public void GetSpawnData(SpawnData data)
+    {
+        eAnim.runtimeAnimatorController = eAnimCon[data.spriteType];
+        eSpeed = data.eSpeed;
+        eMaxHealth = data.eHealth;
+        eHealth = data.eHealth;
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!collision.CompareTag("Bullet"))
+            return;
+        eHealth -= collision.GetComponent<Bullet>().bDamage;
+
+        if(eHealth > 0)
+        {
+
+        }
+        else
+        {
+            Dead();
+        }
+
+        
+    }
+    void Dead()
+    {
+        gameObject.SetActive(false);
     }
 }
