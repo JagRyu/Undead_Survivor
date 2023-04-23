@@ -13,19 +13,23 @@ public class Enemy : MonoBehaviour
 
     bool isLive;
     Rigidbody2D eRigid;
+    Collider2D eColl;
     SpriteRenderer eSprite;
     Animator eAnim;
+    WaitForFixedUpdate wait;
 
     void Awake()
     {
         eRigid = GetComponent<Rigidbody2D>();
+        eColl = GetComponent<Collider2D>();
         eSprite = GetComponent<SpriteRenderer>();
         eAnim = GetComponent<Animator>();
+        wait = new WaitForFixedUpdate();
     }
 
     void FixedUpdate()
     {
-        if (!isLive)
+        if (!isLive || eAnim.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
             return;
 
         Vector2 dirVec = eTarget.position - eRigid.position;
@@ -46,6 +50,10 @@ public class Enemy : MonoBehaviour
     {
         eTarget = GameManager.instace.player.GetComponent<Rigidbody2D>();
         isLive = true;
+        eColl.enabled = true;
+        eRigid.simulated = true;
+        eSprite.sortingOrder = 2;
+        eAnim.SetBool("Dead", false);
         eHealth = eMaxHealth;
     }
 
@@ -58,21 +66,40 @@ public class Enemy : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.CompareTag("Bullet"))
+        if (!collision.CompareTag("Bullet") || !isLive)
             return;
         eHealth -= collision.GetComponent<Bullet>().bDamage;
+        StartCoroutine(KnockBack());
 
-        if(eHealth > 0)
+
+        if (eHealth > 0)
         {
-
+            eAnim.SetTrigger("Hit");
         }
         else
         {
-            Dead();
-        }
+            isLive = false;
+            eColl.enabled = false;
+            eRigid.simulated = false;
+            eSprite.sortingOrder = 1;
+            eAnim.SetBool("Dead", true);
 
-        
+            GameManager.instace.kill++;
+            GameManager.instace.GetExp();
+        }
     }
+
+    
+    IEnumerator KnockBack()
+    {
+        yield return wait; //하나의 물리 프레임 딜레이
+
+        Vector3 playerPos = GameManager.instace.player.transform.position;
+        Vector3 dirVec = transform.position - playerPos;
+        eRigid.AddForce(dirVec.normalized*5, ForceMode2D.Impulse);
+    }
+
+
     void Dead()
     {
         gameObject.SetActive(false);

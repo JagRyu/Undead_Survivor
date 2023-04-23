@@ -17,12 +17,9 @@ public class Weapon : MonoBehaviour
 
     void Awake()
     {
-        player = GetComponentInParent<Player>();
+        player = GameManager.instace.player;
     }
-    void Start()
-    {
-        Init();
-    }
+    
     void Update()
     {
         switch (wId)
@@ -53,11 +50,29 @@ public class Weapon : MonoBehaviour
         {
             Batch();
         }
-
-
+        player.BroadcastMessage("ApplyGear",SendMessageOptions.DontRequireReceiver);
     }
-    public void Init()
+    public void Init(ItemData data)
     {
+        //Basic Set
+        name = "Weapon " + data.itemId;
+        transform.parent = player.transform;
+        transform.localPosition = Vector3.zero;
+
+        //Property Set
+        wId = data.itemId;
+        wDamage = data.baseDamage;
+        wCount = data.baseCount;
+
+        for (int index = 0; index < GameManager.instace.pool.prefabs.Length; index++)
+        {
+            if(data.projectile == GameManager.instace.pool.prefabs[index])
+            {
+                wPrefabId = index;
+                break;
+            }
+        }
+
         switch (wId) 
         {
             case 0:
@@ -71,6 +86,14 @@ public class Weapon : MonoBehaviour
             default:
                 break;
         }
+        // Hand Set
+        Hand hand = player.hands[(int)data.itemType];
+        hand.spriter.sprite = data.hand;
+        hand.gameObject.SetActive(true);
+
+
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
+
     }
     void Batch()
     {
@@ -98,8 +121,6 @@ public class Weapon : MonoBehaviour
             bullet.Translate(bullet.up * 1.2f, Space.World);
 
             bullet.GetComponent<Bullet>().Init(wDamage, -1, Vector3.zero); //-1 is Infinity Per.
-
-
         }
     }
     void Fire()
@@ -116,6 +137,5 @@ public class Weapon : MonoBehaviour
         bullet.rotation = Quaternion.FromToRotation(Vector3.up,targetDir);
 
         bullet.GetComponent<Bullet>().Init(wDamage, wCount, targetDir); //-1 is Infinity Per.
-
     }
 }
