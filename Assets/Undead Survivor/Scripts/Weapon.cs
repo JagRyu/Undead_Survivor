@@ -22,6 +22,9 @@ public class Weapon : MonoBehaviour
     
     void Update()
     {
+        if (!GameManager.instace.isLive)
+            return;
+
         switch (wId)
         {
             case 0:

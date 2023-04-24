@@ -29,6 +29,9 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!GameManager.instace.isLive)
+            return;
+
         if (!isLive || eAnim.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
             return;
 
@@ -40,6 +43,9 @@ public class Enemy : MonoBehaviour
 
     void LateUpdate()
     {
+        if (!GameManager.instace.isLive)
+            return;
+
         if (!isLive)
             return;
 
@@ -68,6 +74,7 @@ public class Enemy : MonoBehaviour
     {
         if (!collision.CompareTag("Bullet") || !isLive)
             return;
+
         eHealth -= collision.GetComponent<Bullet>().bDamage;
         StartCoroutine(KnockBack());
 

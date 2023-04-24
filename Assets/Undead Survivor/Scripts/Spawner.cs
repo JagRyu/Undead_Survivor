@@ -18,6 +18,9 @@ public class Spawner : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.instace.isLive)
+            return;
+
         timer += Time.deltaTime;
         level = Mathf.Min(Mathf.FloorToInt(GameManager.instace.gameTime / 10f), spawnData.Length-1);
         if (timer > spawnData[level].spawnTime)

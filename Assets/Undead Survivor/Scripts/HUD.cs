@@ -32,7 +32,7 @@ public class HUD : MonoBehaviour
             case InfoType.Exp:
                 //GamaManager의 Exp변동에 따라 Slider 조정
                 float curExp = GameManager.instace.exp;
-                float maxExp = GameManager.instace.nextExp[GameManager.instace.level];
+                float maxExp = GameManager.instace.nextExp[Mathf.Min(GameManager.instace.level, GameManager.instace.nextExp.Length - 1)];
                 mySlider.value = curExp / maxExp;
 
                 break;

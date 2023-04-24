@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 0
   itemName: "\uC0BD"
-  itemDesc: 
+  itemDesc: "\uB370\uBBF8\uC9C0 {0}% \uC99D\uAC00\n\uD68C\uC804\uCCB4 {1}\uAC1C \uCD94\uAC00"
   itemIcon: {fileID: -181907988, guid: d71a3dc7aa20fad4f9a99fc76a9254ba, type: 3}
   itemType: 0
-  baseDamage: 4.5
+  baseDamage: 1.5
   baseCount: 1
   damages:
   - 0.5
@@ -25,6 +25,6 @@ MonoBehaviour:
   - 1.5
   - 2
   - 3
-  counts: 0300000005000000060000000700000008000000
+  counts: 0100000001000000010000000100000001000000
   projectile: {fileID: 7270263298289705457, guid: 3b7ba201da7be8b4eaf423070c319b1d, type: 3}
   hand: {fileID: 143021600, guid: 0d5e657ee5a074e4baa53d5b248a01d2, type: 3}

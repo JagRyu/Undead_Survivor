@@ -13,6 +13,9 @@ public class Follow : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!GameManager.instace.isLive)
+            return;
+
         rect.position = Camera.main.WorldToScreenPoint(GameManager.instace.player.transform.position);
     }
 }
