@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public float pSpeed;
     public Scanner scanner;
     public Hand[] hands;
+    public RuntimeAnimatorController[] animCon;
 
 
     Rigidbody2D pRigid;
@@ -23,7 +24,14 @@ public class Player : MonoBehaviour
         scanner = GetComponent<Scanner>();
         hands = GetComponentsInChildren<Hand>(true);
     }
-   
+
+    void OnEnable()
+    {
+        pSpeed = 4* Character.Speed;
+        pAnim.runtimeAnimatorController = animCon[GameManager.instace.playerId];
+
+    }
+
 
     void Update()
     {

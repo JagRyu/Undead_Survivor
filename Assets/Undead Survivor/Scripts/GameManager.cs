@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public bool isLive;
 
     [Header("# Player Info")]
+    public int playerId;
     public int level;
     public int kill;
     public int exp;
@@ -32,14 +33,18 @@ public class GameManager : MonoBehaviour
     {
         instace = this;
     }
-    public void GameStart()
+    public void GameStart(int id)
     {
+        playerId = id;
         health = maxHealth;
-        //ÀÓ½ÃÄÚµå ±âº»¹«±â
-        uiLevelUp.Select(1); //¿±ÃÑ 
 
+        player.gameObject.SetActive(true);
+        uiLevelUp.Select(playerId % 2);
         isLive = true;
         Resume();
+
+        AudioManager.instance.PlayBgm(true);
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select);
 
     }
     public void GameOver()
@@ -51,6 +56,10 @@ public class GameManager : MonoBehaviour
     {
         isLive = false;
         yield return new WaitForSeconds(0.5f);
+
+        AudioManager.instance.PlayBgm(false);
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Lose);
+
 
         uiResult.gameObject.SetActive(true);
         uiResult.Lose();
@@ -66,6 +75,10 @@ public class GameManager : MonoBehaviour
         isLive = false;
         enemyCleaner.SetActive(true);
         yield return new WaitForSeconds(0.5f);
+
+        AudioManager.instance.PlayBgm(false);
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Win);
+
 
         uiResult.gameObject.SetActive(true);
         uiResult.Win();

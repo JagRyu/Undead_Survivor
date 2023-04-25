@@ -79,12 +79,11 @@ public class Weapon : MonoBehaviour
         switch (wId) 
         {
             case 0:
-                wSpeed = -150; // 마이너스면 시계방향으로 돈다.
+                wSpeed = -150*Character.WeaponSpeed; // 마이너스면 시계방향으로 돈다.
                 Batch();
                 break;
             case 1:
-                wSpeed = 0.3f;
-
+                wSpeed = 0.3f*Character.WeaponRate;
                 break;
             default:
                 break;
@@ -125,6 +124,9 @@ public class Weapon : MonoBehaviour
 
             bullet.GetComponent<Bullet>().Init(wDamage, -1, Vector3.zero); //-1 is Infinity Per.
         }
+
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Melee);
+
     }
     void Fire()
     {
@@ -140,5 +142,7 @@ public class Weapon : MonoBehaviour
         bullet.rotation = Quaternion.FromToRotation(Vector3.up,targetDir);
 
         bullet.GetComponent<Bullet>().Init(wDamage, wCount, targetDir); //-1 is Infinity Per.
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Range);
+
     }
 }

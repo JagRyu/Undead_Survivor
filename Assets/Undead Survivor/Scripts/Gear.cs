@@ -49,18 +49,20 @@ public class Gear : MonoBehaviour
             switch (weapon.wId)
             {
                 case 0:
-                    weapon.wSpeed = -150 + (-150 * rate);
+                    float speed = -150 * Character.WeaponSpeed;
+                    weapon.wSpeed = speed + (speed * rate);
                     break;
 
                 case 1:
-                    weapon.wSpeed = 0.5f * (1f-rate);
+                    speed = 0.5f * Character.WeaponRate;
+                    weapon.wSpeed = speed * (1f-rate);
                     break;
             }
         }
     }
     void SpeedUp()
     {
-        float speed = 4;
+        float speed = 4*Character.Speed;
         GameManager.instace.player.pSpeed = speed + speed * rate;
     }
 }
